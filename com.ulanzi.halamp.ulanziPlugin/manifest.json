@@ -1,0 +1,42 @@
+{
+  "Author": "chocolatescode",
+  "Name": "Home Assistant (encje)",
+  "Description": "Dowolna encja z dowolnego Home Assistanta: przełączanie, automatyczne ikony (jak w HA) z wartością czujnika na przycisku, własne obrazy PNG lub animowane GIF.",
+  "Icon": "images/plugin.png",
+  "Version": "2.1.0",
+  "Type": "JavaScript",
+  "CodePath": "plugin/app.js",
+  "UUID": "com.ulanzi.ulanzistudio.halamp",
+  "Category": "Home Assistant (encje)",
+  "CategoryIcon": "images/plugin.png",
+  "Actions": [
+    {
+      "Name": "Encja HA",
+      "Icon": "images/plugin.png",
+      "Tooltip": "Steruje encją Home Assistant; obraz zmienia się zależnie od stanu",
+      "PropertyInspectorPath": "property-inspector/inspector.html",
+      "UUID": "com.ulanzi.ulanzistudio.halamp.toggle",
+      "state": 0,
+      "States": [
+        {
+          "Name": "Encja",
+          "Image": "images/power_off.png"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Devices": []
+    }
+  ],
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinVersion": "2.1.0"
+  }
+}

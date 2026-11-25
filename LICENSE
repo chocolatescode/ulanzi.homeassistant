@@ -1,0 +1,50 @@
+Copyright (c) 2026 chocolatescode. Wszelkie prawa zastrzeżone. / All rights reserved.
+
+Wtyczka „Home Assistant (encje)” (ulanzi.homeassistant) jest udostępniana bezpłatnie
+na następujących warunkach:
+
+1. Możesz bezpłatnie pobierać, instalować i używać wtyczki na własnych komputerach,
+   także w pracy.
+2. Nie wolno modyfikować wtyczki ani rozpowszechniać jej zmienionych wersji
+   bez pisemnej zgody autora.
+3. Nie wolno zarabiać na wtyczce: sprzedawać jej, pobierać opłat za jej udostępnienie,
+   dołączać jej do płatnych produktów ani usług, ani w inny sposób wykorzystywać jej
+   komercyjnie.
+4. Przekazując wtyczkę dalej w niezmienionej postaci, trzeba dołączyć ten plik licencji.
+5. Wtyczka jest dostarczana „tak jak jest”, bez żadnej gwarancji. Autor nie odpowiada
+   za szkody wynikłe z jej używania.
+
+Zgody na zmiany można poprosić, zakładając zgłoszenie (Issue) w repozytorium:
+https://github.com/chocolatescode/ulanzi.homeassistant
+
+Elementy zewnętrzne mają własne licencje i powyższe ograniczenia ich nie dotyczą:
+- biblioteka `ws` (node_modules/ws) – licencja MIT, plik node_modules/ws/LICENSE;
+- ikony Material Design Icons (Pictogrammers) zapisane w images/icons.pack –
+  Pictogrammers Free License (ikony na licencji Apache 2.0), plik images/MDI-LICENSE.txt;
+- kształty liter czcionki Inter (Rasmus Andersson) zapisane w images/icons.pack –
+  SIL Open Font License 1.1.
+
+---
+
+The "Home Assistant (encje)" plugin (ulanzi.homeassistant) is provided free of charge
+on the following terms:
+
+1. You may download, install and use the plugin free of charge on your own computers,
+   including at work.
+2. You may not modify the plugin or distribute modified versions of it without
+   the author's written permission.
+3. You may not make money from the plugin: you may not sell it, charge for access to it,
+   bundle it with paid products or services, or otherwise use it commercially.
+4. If you pass the plugin on unchanged, you must include this license file.
+5. The plugin is provided "as is", without warranty of any kind. The author is not
+   liable for any damage arising from its use.
+
+To ask for permission to make changes, open an Issue in the repository:
+https://github.com/chocolatescode/ulanzi.homeassistant
+
+Third-party components keep their own licenses and are not subject to the terms above:
+- the `ws` library (node_modules/ws) – MIT license, see node_modules/ws/LICENSE;
+- Material Design Icons (Pictogrammers) stored in images/icons.pack –
+  Pictogrammers Free License (icons under Apache 2.0), see images/MDI-LICENSE.txt;
+- glyph shapes of the Inter typeface (Rasmus Andersson) stored in images/icons.pack –
+  SIL Open Font License 1.1.

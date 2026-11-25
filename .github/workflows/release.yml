@@ -1,0 +1,27 @@
+# Buduje zip z wtyczką i publikuje go w zakładce Releases.
+# Uruchamia się po wypchnięciu tagu (np. v2.1.0) albo ręcznie:
+# Actions -> Release -> Run workflow. Numer wersji jest brany z manifest.json.
+name: Release
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read version
+        id: v
+        run: echo "version=$(jq -r .Version com.ulanzi.halamp.ulanziPlugin/manifest.json)" >> "$GITHUB_OUTPUT"
+      - name: Zip plugin
+        run: zip -r com.ulanzi.halamp.ulanziPlugin.zip com.ulanzi.halamp.ulanziPlugin -x "*/plugin.log*" "*/config.json" "*/icons_report.tsv"
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.v.outputs.version }}
+          name: v${{ steps.v.outputs.version }}
+          files: com.ulanzi.halamp.ulanziPlugin.zip
+          generate_release_notes: true

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+  <title>Home Assistant</title>
+  <link rel="stylesheet" href="../libs/css/uspi.css">
+  <style>
+    :root { color-scheme: dark; }
+    select option, select optgroup { background-color: #18191B; color: #fff; }
+    select option:checked, select option:hover { background-color: #2f3136; color: #fff; }
+    .combo { position: relative; flex: 1; min-width: 0; }
+    .combo .text-input { width: 100%; }
+    .combo-list { position: absolute; left: 0; right: 0; top: calc(100% + 2px); z-index: 50; max-height: 220px; overflow-y: auto;
+      background: #18191B; border: 1px solid #3a3a3a; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,.5); display: none; }
+    .combo-list.open { display: block; }
+    .combo-item { padding: 4px 8px; cursor: pointer; line-height: 1.3; }
+    .combo-item .eid { color: #fff; font-size: 12px; }
+    .combo-item .ename { color: #9a9a9a; font-size: 11px; }
+    .combo-item.active, .combo-item:hover { background: #2f3136; }
+    .combo-empty { padding: 6px 8px; color: #9a9a9a; font-size: 11px; }
+    .hidden-row { display: none !important; }
+    .text-input { box-sizing: border-box; min-width: 0; }
+    .row { display: flex; gap: 4px; align-items: center; }
+    .row .text-input { flex: 1; width: auto; }
+    .row button { flex: none; width: 30px !important; min-width: 0; padding: 0; cursor: pointer; }
+    .row button.wide { width: auto !important; padding: 0 8px; }
+    .note { font-size: 11px; line-height: 1.4; color: #9a9a9a; }
+    .ok { color: #5cc46b; } .err { color: #e5675f; }
+    .section { font-size: 12px; color: #cfcfcf; margin: 10px 0 2px; border-top: 1px solid #333; padding-top: 6px; }
+  </style>
+</head>
+<body>
+  <div class="uspi-wrapper hidden">
+    <form id="property-inspector" autocomplete="off">
+      <div class="section">Serwer Home Assistant</div>
+      <div class="uspi-item">
+        <div class="uspi-item-label">Adres</div>
+        <input class="uspi-item-value text-input" name="url" type="text" placeholder="https://moj-ha.pl lub http://192.168.1.10:8123">
+      </div>
+      <div class="uspi-item">
+        <div class="uspi-item-label">Token</div>
+        <div class="uspi-item-value row">
+          <input class="text-input" name="token" type="password" placeholder="Token długoterminowy z profilu HA">
+          <button type="button" id="connect" class="wide" title="Połącz i pobierz listę encji">Połącz</button>
+        </div>
+      </div>
+      <div class="uspi-item">
+        <div class="uspi-item-label empty"></div>
+        <div class="uspi-item-value note" id="status">Token: HA → Twój profil → Bezpieczeństwo → Tokeny długoterminowe.</div>
+      </div>
+
+      <div class="section">Encja i akcja</div>
+      <div class="uspi-item">
+        <div class="uspi-item-label">Encja</div>
+        <div class="uspi-item-value combo">
+          <input class="text-input" name="entityId" type="text" placeholder="np. light.lampa_biurko" autocomplete="off" spellcheck="false">
+          <div class="combo-list" id="entities"></div>
+        </div>
+      </div>
+      <div class="uspi-item">
+        <div class="uspi-item-label empty"></div>
+        <div class="uspi-item-value note" id="entityInfo"></div>
+      </div>
+      <div class="uspi-item">
+        <div class="uspi-item-label">Po naciśnięciu</div>
+        <select class="uspi-item-value select" name="action" data-default="toggle">
+          <option value="toggle">Przełącz (wł./wył.)</option>
+          <option value="turn_on">Włącz</option>
+          <option value="turn_off">Wyłącz</option>
+          <option value="custom">Własna usługa…</option>
+          <option value="none">Nic (tylko pokazuj stan)</option>
+        </select>
+      </div>
+      <div class="uspi-item" data-show="action=custom">
+        <div class="uspi-item-label">Usługa</div>
+        <input class="uspi-item-value text-input" name="customService" type="text" placeholder="np. light.turn_on">
+      </div>
+      <div class="uspi-item" data-show="action=custom">
+        <div class="uspi-item-label">Dane (JSON)</div>
+        <input class="uspi-item-value text-input" name="customData" type="text" placeholder='np. {"brightness_pct": 50}'>
+      </div>
+
+      <div class="section">Ikona</div>
+      <div class="uspi-item">
+        <div class="uspi-item-label">Ikona</div>
+        <select class="uspi-item-value select" name="icon" data-default="auto">
+          <option value="auto">Automatyczna z wartością</option>
+          <option value="plain">Automatyczna bez wartości</option>
+          <option value="classic">Klasyczna (stara)</option>
+        </select>
+      </div>
+      <div class="uspi-item">
+        <div class="uspi-item-label empty"></div>
+        <div class="uspi-item-value note">Ikona dobiera się sama do encji (jak w Home Assistancie). Własne obrazy poniżej mają pierwszeństwo.</div>
+      </div>
+      <div class="section">Własne obrazy (PNG, JPG lub animowany GIF)</div>
+      <div class="uspi-item">
+        <div class="uspi-item-label">Włączona</div>
+        <div class="uspi-item-value row">
+          <input class="text-input" name="imgOn" type="text" placeholder="automatyczny">
+          <button type="button" data-pick="imgOn" title="Wybierz plik">…</button>
+          <button type="button" data-clear="imgOn" title="Automatyczny">×</button>
+        </div>
+      </div>
+      <div class="uspi-item">
+        <div class="uspi-item-label">Wyłączona</div>
+        <div class="uspi-item-value row">
+          <input class="text-input" name="imgOff" type="text" placeholder="automatyczny">
+          <button type="button" data-pick="imgOff" title="Wybierz plik">…</button>
+          <button type="button" data-clear="imgOff" title="Automatyczny">×</button>
+        </div>
+      </div>
+      <div class="uspi-item">
+        <div class="uspi-item-label">Niedostępna</div>
+        <div class="uspi-item-value row">
+          <input class="text-input" name="imgOther" type="text" placeholder="automatyczny">
+          <button type="button" data-pick="imgOther" title="Wybierz plik">…</button>
+          <button type="button" data-clear="imgOther" title="Automatyczny">×</button>
+        </div>
+      </div>
+
+      <div class="section">Napis na przycisku</div>
+      <div class="uspi-item">
+        <div class="uspi-item-label">Pokazuj</div>
+        <select class="uspi-item-value select" name="text" data-default="none">
+          <option value="none">Nic</option>
+          <option value="state">Stan (np. 21.5 °C)</option>
+          <option value="name">Nazwę encji</option>
+          <option value="custom">Własny tekst…</option>
+        </select>
+      </div>
+      <div class="uspi-item" data-show="text=custom">
+        <div class="uspi-item-label">Tekst</div>
+        <input class="uspi-item-value text-input" name="customText" type="text" placeholder="np. {state}{unit} lub {attr.brightness}">
+      </div>
+    </form>
+  </div>
+  <script src="../libs/js/constants.js"></script>
+  <script src="../libs/js/eventEmitter.js"></script>
+  <script src="../libs/js/timers.js"></script>
+  <script src="../libs/js/utils.js"></script>
+  <script src="../libs/js/ulanziApi.js"></script>
+  <script src="./inspector.js"></script>
+</body>
+</html>

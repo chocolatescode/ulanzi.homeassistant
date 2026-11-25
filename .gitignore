@@ -1,0 +1,8 @@
+plugin.log
+plugin.log.old
+*.bak
+*.bak2
+# zapisywane przez wtyczkę na komputerze użytkownika — zawierają adres serwera, token i listę encji
+config.json
+icons_report.tsv
+preview_grid.png
